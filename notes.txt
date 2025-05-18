@@ -1,0 +1,41 @@
+Authentication 
+patterns
+
+statefull = {
+    which maintains state or data or server side 
+}
+
+Analogy statefull
+e.g = {
+    suppose you park a car in mall then a parking boy give u a token that your 
+    car is park in parking area and parking boy write a note in his diary and 
+    write the entry of the car number plate with the respected token number when
+    u return the and gives the token with 24 number then the parkboy checks the 
+    entry then find the car then return u.
+}
+
+?Nodejs statefull
+
+e.g{
+    client = when a client wants to access the the server , server sends the session uid
+            to client.
+    =>      when he comes to GET /users | uid: 345
+    =>      { servers check the user is exists and check the state and authenticate}
+    <=>     {then if the uid matches with state check then it will response : all users }
+
+    ? How to transfer uid ? 
+
+    Client __________________________________________ Server
+    <======================Cookies==========================>
+    <======================response=========================>
+    <======================headers==========================>
+}
+
+
+express Flow =>       auth middleware   => endPoint route
+                    {checks for Cookies
+                    value or uid, if
+                    valid calls next()
+                    else rejects the request
+                    }
+                
