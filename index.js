@@ -4,7 +4,7 @@ const path = require('path')
 const connectionDB = require('./connection')
 const { URL } = require('./model/url')
 const cookieParser  = require('cookie-parser')
-const {restricTOlogginuser,checkAuth} = require('./middlewares/auth')
+const {checkForAuthentication,restrictRole} = require('./middlewares/auth')
 const urlRoute = require('./router/urlRouter')
 const staticRoute = require('./router/staticRoutes')
 const userRoute = require('./router/user')
@@ -16,13 +16,15 @@ connectionDB('mongodb://localhost:27017/short_url')
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser())
+app.use(checkForAuthentication)
+
 app.set('view engine', 'ejs')
 
 app.set('views', path.resolve('./views'))
-app.use('/url', restricTOlogginuser, urlRoute)
+app.use('/url',restrictRole(['Normal', 'Admin']), urlRoute)
 app.use('/user', userRoute)
 
-app.use('/',checkAuth, staticRoute)
+app.use('/', staticRoute)
 app.get('/test', async (req, res) => {
     const allUrls = await URL.find({});
     return res.render('home', { urls: allUrls})
